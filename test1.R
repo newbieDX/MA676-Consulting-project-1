@@ -14,18 +14,60 @@ q102 <- survey_clean_finished %>% select(starts_with("Q102"))
 
 q103 <- survey_clean_finished %>% select(starts_with("Q103"))
 
-
+#------------------summarize q102---------------------------------------
 
 survey_result_q102 <- survey_result[1,] %>%
   select(starts_with("Q102")) %>% 
   pivot_longer(names_to = "question_num", cols = starts_with("Q102"))
 
+rbind(q102,survey_result_q102$value)
+
+
+
 # get the short term of each question
 survey_result_q102$value <- gsub(".*: - ", "", survey_result_q102$value)
 
+# stat
+q102_table <- as.data.frame(table(q102$Q102_1))
+
+# sumarize the result
+for (i in 2:ncol(q102)){
+  # set the name for each TMY file
+  names <- paste0("Q102","_",i)
+  
+  # get the bootstrap results
+  x <- as.data.frame(table(q102[names]))
+  
+  # assign the results to the question names
+  assign(names, x)
+  q102_table <- left_join(q102_table,x, by="Var1")
+}
+
+
+
+names(q102_table)[2:ncol(q102_table)] <- colnames(q102)
+fill_NA <- function(x){
+  is.na(q102_table) <- 0
+}
+q102_table[is.na(q102_table)] <- 0
+
+
+q102_table <- q102_table %>% pivot_longer(names_to = "question_num", cols = c())
+
+#------------------------------------------------------
+
+#------------------summarize q103---------------------------------------
+
+# TO GO
+## come back later with a better idea
+# which(q102_table)
+
+
 
 # visualization
-ggplot(data = q102, mapping = aes(x=as.factor()))
+ggplot(data = q102_table, mapping = aes(x=Val1))+
+  geom_bar() +
+  facet_wrap()
 
 
 
