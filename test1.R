@@ -46,13 +46,27 @@ for (i in 2:ncol(q102)){
 
 
 names(q102_table)[2:ncol(q102_table)] <- colnames(q102)
-fill_NA <- function(x){
-  is.na(q102_table) <- 0
-}
+
 q102_table[is.na(q102_table)] <- 0
 
+#####################
 
-q102_table <- q102_table %>% pivot_longer(names_to = "question_num", cols = c())
+# t_q102_table <- as.data.frame(t(q102_table))
+# 
+# t_q102_table$names <- rownames(t_q102_table)
+# 
+# colnames(t_q102_table) <- t_q102_table[1,]
+# t_q102_table <- t_q102_table[-1,]
+# row.names(t_q102_table) <- c(1:nrow(t_q102_table))
+# 
+# tt_q102_table <- as.data.frame(t(t_q102_table))
+
+
+
+q102_table <- q102_table %>%
+  pivot_longer(-c(Var1), names_to = "question_num", values_to = "Freq")
+
+q102_table_visual <- left_join(q102_table,survey_result_q102,by= "question_num")
 
 #------------------------------------------------------
 
@@ -65,9 +79,9 @@ q102_table <- q102_table %>% pivot_longer(names_to = "question_num", cols = c())
 
 
 # visualization
-ggplot(data = q102_table, mapping = aes(x=Val1))+
-  geom_bar() +
-  facet_wrap()
+ggplot(data = q102_table_visual)+
+  geom_bar(mapping = aes(x=Var1,y=Freq),stat = "identity",position = "stack") +
+  facet_wrap(~value)
 
 
 
