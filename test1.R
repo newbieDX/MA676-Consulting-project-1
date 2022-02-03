@@ -16,7 +16,7 @@ q102 <- survey_clean_finished %>% select(starts_with("Q102"))
 
 q103 <- survey_clean_finished %>% select(starts_with("Q103"))
 
-q9_102 <- survey_clean_finished %>% select(starts_with("Q9")|starts_with("Q102"))
+q9_102 <- survey_clean_finished %>% select(starts_with("Q9")|starts_with("Q102")| starts_with("Q10"))
 
 q102_q9_yes <- survey_clean_finished %>% filter(Q9 == "Yes") %>% select(starts_with("Q102"))
 
