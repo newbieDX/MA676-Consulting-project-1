@@ -11,6 +11,23 @@ survey_clean <- survey_count %>% select(c(4,5,7,14,15,17:ncol(survey_count)))
 
 survey_clean_finished <- survey_clean %>% filter(Finished == "True" & Q1 == "Yes")
 
+aa <- function(x){
+  factor(x,levels = c("Strongly disagree","Disagree","Neutral","Agree","Strongly agree"))
+}
+
+survey_clean_finished[23:75] <- lapply(survey_clean_finished[23:75], FUN = aa) 
+
+bb <- function(x){
+  as.numeric(x)
+}
+
+survey_clean_finished[23:75] <- lapply(survey_clean_finished[23:75], FUN = bb) 
+
+
+survey_clean_finished[23:75] <- as.numeric(survey_clean_finished[23:75])
+
+
+                                            
 # Do GCs with many years of preconception experience tend to agree with Q103_1 - Q103_7 more often than GCs with less years of preconception experience? 
 
 q10_q103 <- survey_clean_finished %>% select(c(1, 4, 5, 17) | starts_with("Q103"))
