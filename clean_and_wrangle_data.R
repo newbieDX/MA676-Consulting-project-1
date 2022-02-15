@@ -11,6 +11,8 @@ survey_clean <- survey_count %>% select(c(4,5,7,14,15,17:ncol(survey_count)))
 
 survey_clean_finished <- survey_clean %>% filter(Finished == "True" & Q1 == "Yes")
 
+# add level to questions with response about agree level:
+
 aa <- function(x){
   factor(x,levels = c("Strongly disagree","Disagree","Neutral","Agree","Strongly agree"))
 }
@@ -26,7 +28,13 @@ survey_clean_finished[23:75] <- lapply(survey_clean_finished[23:75], FUN = bb)
 
 survey_clean_finished[23:75] <- as.numeric(survey_clean_finished[23:75])
 
+# add level to Q3:
 
+survey_clean_finished$Q3 <- factor(survey_clean_finished$Q3,levels = c("Less than 1 year","1-4 years","5-9 years","10-14 years","More than 14 years")) %>% as.numeric()
+
+# add level to Q4:
+
+survey_clean_finished$Q4 <- factor(survey_clean_finished$Q4,levels = c("0-20%","21-40%","41-60%","61-80%","81-100%")) %>% as.numeric()
                                             
 # Do GCs with many years of preconception experience tend to agree with Q103_1 - Q103_7 more often than GCs with less years of preconception experience? 
 
@@ -70,6 +78,7 @@ renal_alport <- q102 %>% select(c(1, 2, 3, 9, 10))
 
 BRCA1_cancer <- q102 %>% select(c(1, 2, 3, 5, 6)) 
   
+
   
   
   
