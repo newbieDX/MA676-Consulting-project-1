@@ -35,6 +35,22 @@ survey_clean_finished$Q3 <- factor(survey_clean_finished$Q3,levels = c("Less tha
 # add level to Q4:
 
 survey_clean_finished$Q4 <- factor(survey_clean_finished$Q4,levels = c("0-20%","21-40%","41-60%","61-80%","81-100%")) %>% as.numeric()
+
+# add level to Q9:
+
+survey_clean_finished$Q9 <- factor(survey_clean_finished$Q9,levels = c("No", "Yes")) %>% as.numeric()
+
+# add level to Q7:
+
+survey_clean_finished$Q7 <- factor(survey_clean_finished$Q7,levels = c("No", "Yes")) %>% as.numeric()
+
+# Replace NA with 0 for Q10:
+
+survey_clean_finished$Q10[is.na(survey_clean_finished$Q10)] <- 0
+
+# add level to Q10:
+
+survey_clean_finished$Q10 <- factor(survey_clean_finished$Q10,levels = c("0", "0-3", "4-6", "7-9","+10")) %>% as.numeric()
                                             
 # Do GCs with many years of preconception experience tend to agree with Q103_1 - Q103_7 more often than GCs with less years of preconception experience? 
 
