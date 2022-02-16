@@ -25,8 +25,8 @@ bb <- function(x){
 
 survey_clean_finished[23:75] <- lapply(survey_clean_finished[23:75], FUN = bb) 
 
-
-survey_clean_finished[23:75] <- as.numeric(survey_clean_finished[23:75])
+#survey_clean_finished[23:75] <- as.numeric(survey_clean_finished[23:75])
+#a <- lapply(survey_clean_finished[23:75], as.numeric)
 
 # add level to Q3:
 
