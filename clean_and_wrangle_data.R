@@ -30,19 +30,19 @@ survey_clean_finished[23:75] <- lapply(survey_clean_finished[23:75], FUN = bb)
 
 # add level to Q3:
 
-survey_clean_finished$Q3 <- factor(survey_clean_finished$Q3,levels = c("Less than 1 year","1-4 years","5-9 years","10-14 years","More than 14 years")) %>% as.numeric()
+survey_clean_finished$Q3 <- factor(survey_clean_finished$Q3,levels = c("Less than 1 year","1-4 years","5-9 years","10-14 years","More than 14 years")) 
 
 # add level to Q4:
 
-survey_clean_finished$Q4 <- factor(survey_clean_finished$Q4,levels = c("0-20%","21-40%","41-60%","61-80%","81-100%")) %>% as.numeric()
+survey_clean_finished$Q4 <- factor(survey_clean_finished$Q4,levels = c("0-20%","21-40%","41-60%","61-80%","81-100%")) 
 
 # add level to Q9:
 
-survey_clean_finished$Q9 <- factor(survey_clean_finished$Q9,levels = c("No", "Yes")) %>% as.numeric()
+survey_clean_finished$Q9 <- factor(survey_clean_finished$Q9,levels = c("No", "Yes")) 
 
 # add level to Q7:
 
-survey_clean_finished$Q7 <- factor(survey_clean_finished$Q7,levels = c("No", "Yes")) %>% as.numeric()
+survey_clean_finished$Q7 <- factor(survey_clean_finished$Q7,levels = c("No", "Yes")) 
 
 # Replace NA with 0 for Q10:
 
@@ -50,7 +50,7 @@ survey_clean_finished$Q10[is.na(survey_clean_finished$Q10)] <- 0
 
 # add level to Q10:
 
-survey_clean_finished$Q10 <- factor(survey_clean_finished$Q10,levels = c("0", "0-3", "4-6", "7-9","+10")) %>% as.numeric()
+survey_clean_finished$Q10 <- factor(survey_clean_finished$Q10,levels = c("0", "0-3", "4-6", "7-9","+10"))
                                             
 # Do GCs with many years of preconception experience tend to agree with Q103_1 - Q103_7 more often than GCs with less years of preconception experience? 
 
@@ -87,6 +87,8 @@ q3_repauto <- survey_clean_finished %>% select(c(1, 4, 5, 12, 35, 39, 44, 50, 56
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, 107, 42, 109, 54) more often than GCs with less years of patient-facing genetic counseling experience? 
 
 q3_resava <- survey_clean_finished %>% select(c(1, 4, 5, 12, 33, 42, 47, 53, 59))
+
+# Do the GCs tend to feel more morally uneasy with transferring affected embryos  for “BRCA1 Cancer group” more often than the group “Renal Alport”?
 
 q102 <- survey_clean_finished %>% select(c(1, 4, 5) | starts_with("Q102"))
 
