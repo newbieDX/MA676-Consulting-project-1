@@ -290,15 +290,47 @@ write.csv(corr_matrix_mean,file = "corr_matrix.csv")
 
 # make some visualization of the correlation coefficients
 ## q10_q103_corr, q7_q103_corr, q3_q103_corr, q3_qol_corr, q3_fh_corr, q3_var_corr,q3_repauto_corr
-# q10_q103_corr_longer <- q10_q103_corr %>% 
-#   pivot_longer(cols = c(1:ncol(q10_q103_corr)),
-#                names_to = "question_num",
-#                values_to = "corr_value")
+boxplot_corr <- function(df_corr){
+  df_corr_longer <- df_corr %>%
+    pivot_longer(cols = c(1:ncol(df_corr)),
+                 names_to = "question_num",
+                 values_to = "corr_value")
+  
+  ggplot(data = df_corr_longer,mapping = aes(x=question_num,y=corr_value)) +
+    geom_boxplot() +
+    geom_hline(aes(yintercept=0), colour="#990000", linetype="solid")+
+    geom_hline(aes(yintercept=0.05), colour="#990000", linetype="dashed")+
+    geom_hline(aes(yintercept=-0.05), colour="#990000", linetype="dashed") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
 
-# ggplot(data = q10_q103_corr) + 
-#   geom_boxplot(x = )
+boxplot_corr_1 <- function(df_corr){
+  df_corr_longer <- df_corr %>%
+    pivot_longer(cols = c(1:ncol(df_corr)),
+                 names_to = "question_num",
+                 values_to = "corr_value")
+  
+  ggplot(data = df_corr_longer,mapping = aes(x=question_num,y=corr_value)) +
+    geom_boxplot()
+}
 
+boxplot_corr(q10_q103_corr)
 
+boxplot_corr(q7_q103_corr)
+
+boxplot_corr_1(q7_q10_corr)
+
+boxplot_corr(q3_q103_corr)
+
+boxplot_corr(q3_qol_corr)
+
+boxplot_corr(q3_fh_corr)
+
+boxplot_corr(q3_var_corr)
+
+boxplot_corr(q3_repauto_corr)
+
+boxplot_corr(q3_resava_corr)
 # lapply(q10_q103_corr,FUN = fivenum)
 
 
@@ -306,36 +338,40 @@ boxplot(q10_q103_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q7_q103_corr, main = "Correlation", horizontal = TRUE)
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-boxplot(q7_q10_corr, main = "Correlation", horizontal = TRUE)
+
+boxplot(q7_q103_corr, main = "Correlation", las=2)
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
 
-boxplot(q3_q103_corr, main = "Correlation", horizontal = TRUE)
+
+boxplot(q7_q10_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_qol_corr, main = "Correlation", horizontal = TRUE)
+
+boxplot(q3_q103_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_fh_corr, main = "Correlation", horizontal = TRUE)
+boxplot(q3_qol_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_var_corr, main = "Correlation", horizontal = TRUE)
+
+boxplot(q3_fh_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_repauto_corr, main = "Correlation", horizontal = TRUE)
+boxplot(q3_var_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_resava_corr, main = "Correlation", horizontal = TRUE)
+boxplot(q3_repauto_corr, main = "Correlation")
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_resava_corr, main = "Correlation")
 abline(h=0,col = "red")
 abline(h=0.05,col = "red",lty = 3)
 abline(h=-0.05,col = "red",lty = 3)
