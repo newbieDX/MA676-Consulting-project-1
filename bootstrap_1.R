@@ -23,6 +23,8 @@ library(ggplot2)
 #   }
 #   theta.star
 # }
+set.seed(2022)
+
 
 bootstrap_corr <- function(x, B = 100){
   n <- nrow(x)
@@ -77,6 +79,8 @@ q10_q103.7_corr <- as.data.frame(q10_q103.7_corr)
 ### join them together
 q10_q103_corr <- cbind(q10_q103.1_corr,q10_q103.2_corr,q10_q103.3_corr,
                        q10_q103.4_corr,q10_q103.5_corr,q10_q103.6_corr,q10_q103.7_corr)
+
+
 
 # q10_q103_bootstrap <- data.frame(seq(1:100))
 # 
@@ -254,7 +258,91 @@ q3_q59_corr <- as.data.frame(q3_q59_corr)
 
 q3_repauto_corr <- cbind(q3_q29_corr,q3_q35_corr,q3_q41_corr,q3_q47_corr,q3_q53_corr,q3_q59_corr)
 
+# Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, 107, 42, 109, 54) more often than GCs with less years of patient-facing genetic counseling experience? 
+
+
+q3_resava <- survey_clean_finished %>% select(c(1, 4, 5, 12, 33, 42, 47, 53, 59))
+#Q25, 107, 42, 109, 54
+
+q3_q25_corr <- replicate(n = 100,expr = bootstrap_corr(q3_resava[,c("Q3","Q25")],1000))
+q3_q25_corr <- as.data.frame(q3_q25_corr)
+
+q3_q107_corr <- replicate(n = 100,expr = bootstrap_corr(q3_resava[,c("Q3","Q107")],1000))
+q3_q107_corr <- as.data.frame(q3_q107_corr)
+
+q3_q42_corr <- replicate(n = 100,expr = bootstrap_corr(q3_resava[,c("Q3","Q42")],1000))
+q3_q42_corr <- as.data.frame(q3_q42_corr)
+
+q3_q109_corr <- replicate(n = 100,expr = bootstrap_corr(q3_resava[,c("Q3","Q109")],1000))
+q3_q109_corr <- as.data.frame(q3_q109_corr)
+
+q3_q54_corr <- replicate(n = 100,expr = bootstrap_corr(q3_resava[,c("Q3","Q54")],1000))
+q3_q54_corr <- as.data.frame(q3_q54_corr)
+
+q3_resava_corr <- cbind(q3_q25_corr, q3_q107_corr, q3_q42_corr,
+                        q3_q109_corr, q3_q54_corr)
 # join the corr all together with 100 bootstrap corr coefficients for each and the last row is the mean of every first 100 value
 corr_matrix <- cbind(q10_q103_corr, q7_q103_corr, q3_q103_corr, q3_qol_corr, q3_fh_corr, q3_var_corr,q3_repauto_corr)
 corr_matrix_mean <- rbind(corr_matrix, as.data.frame(lapply(corr_matrix, FUN = mean)))
 write.csv(corr_matrix_mean,file = "corr_matrix.csv")
+
+
+
+# make some visualization of the correlation coefficients
+## q10_q103_corr, q7_q103_corr, q3_q103_corr, q3_qol_corr, q3_fh_corr, q3_var_corr,q3_repauto_corr
+# q10_q103_corr_longer <- q10_q103_corr %>% 
+#   pivot_longer(cols = c(1:ncol(q10_q103_corr)),
+#                names_to = "question_num",
+#                values_to = "corr_value")
+
+# ggplot(data = q10_q103_corr) + 
+#   geom_boxplot(x = )
+
+
+# lapply(q10_q103_corr,FUN = fivenum)
+
+
+boxplot(q10_q103_corr, main = "Correlation")
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q7_q103_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q7_q10_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+
+boxplot(q3_q103_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_qol_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_fh_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_var_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_repauto_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+boxplot(q3_resava_corr, main = "Correlation", horizontal = TRUE)
+abline(h=0,col = "red")
+abline(h=0.05,col = "red",lty = 3)
+abline(h=-0.05,col = "red",lty = 3)
+
+# q3_q25_corr, q3_q107_corr, q3_q42_corr,
+# q3_q109_corr, q3_q54_corr
+
+text(x=fivenum(q10_q103_corr), labels = fivenum(q10_q103_corr))
+
+
