@@ -88,6 +88,7 @@ q3_q103_visual_f <- function(qnum){
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “quality of life” across conditions (Q24, Q31, 32, 108, 113, 51, 110) more often than GCs with less years of patient-facing genetic counseling experience? 
 
+
 q3_qol_visual <- q3_qol %>% select(c(1,4:11))
 q3_qol_table <- q3_qol_visual %>%
   pivot_longer(-c(IPAddress,Q3), names_to = "question_num", values_to = "Response")
@@ -100,7 +101,7 @@ q3_qol_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_qol_visual_f("Q24")
+# q3_qol_visual_f("Q113")
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “family history” across conditions (Q26, 30, 37, 40, 46, 52, 58) more often than GCs with less years of patient-facing genetic counseling experience? 
 
@@ -116,7 +117,7 @@ q3_fh_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_fh_visual_f("Q26")
+# q3_fh_visual_f("Q37")
 
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “Variability” across conditions (Q23, 27 33, 38, 45, 56) more often than GCs with less years of patient-facing genetic counseling experience? 
@@ -133,7 +134,7 @@ q3_var_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_var_visual_f("Q23")
+q3_var_visual_f("Q45")
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “reproductive autonomy” across conditions (Q29, 35, 36, 41, 47, 53, 59) more often than GCs with less years of patient-facing genetic counseling experience?
 
@@ -149,7 +150,8 @@ q3_repauto_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_repauto_visual_f("Q29")
+# q3_repauto_visual_f("Q59")
+
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, 107, 42, 109, 54) more often than GCs with less years of patient-facing genetic counseling experience? 
 
@@ -165,9 +167,9 @@ q3_resava_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_resava_visual_f("Q25")
+q3_resava_visual_f("Q54")
 
-# Do the GCs tend to feel more morally uneasy with transferring affected embryos  for “BRCA1 Cancer group” more often than the group “Renal Alport”?
+# Do the GCs tend to feel more morally uneasy with transferring affected embryos for “BRCA1 Cancer group” more often than the group “Renal Alport”?
 
 BRCA1_cancer_visual <- BRCA1_cancer %>% select(c(1,4,5))
 BRCA1_cancer_table <- BRCA1_cancer_visual %>%
