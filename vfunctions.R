@@ -15,7 +15,10 @@ q10_q103_visual_f <- function(qnum){
     facet_grid(~Q10)
 }
 
-# q10_q103_visual_f("Q103_1")
+# Relatively high corr qnum: q10 with q103_2, q103_3, q103_4
+
+
+# q10_q103_visual_f("Q103_4")
 
 # ggplot(data = q10_q103_table, aes(x = Response, 
 #                           y = prop.table(stat(count)), 
@@ -44,7 +47,9 @@ q7_q103_visual_f <- function(qnum){
     facet_grid(~Q7)
 }
 
-# q7_q103_visual_f("Q103_1")
+# Relatively high corr qnum: q7 with q103_6
+
+# q7_q103_visual_f("Q103_6")
 
 
 # Do the GCs that have many years of preconception experience (Q10) tend to have encountered a patient that requested embryo transfer (Q7) more than GCs that have less years of preconception experience?
@@ -56,6 +61,10 @@ q7_q10_table <- q7_q10_visual %>%
 q7_q10_visual_plot <- ggplot(q7_q10_table, aes(x = Response, fill = Response))+
   geom_bar(stat = "count", position = "stack")+
   facet_grid(~Q10)
+
+# Positive corrlation between Q7 and Q10
+
+# q7_q10_visual_plot
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with Q103_1 - Q103_7 more often than GCs with less years of patient-facing genetic counseling experience? 
 
@@ -71,7 +80,11 @@ q3_q103_visual_f <- function(qnum){
     facet_grid(~Q3)
 }
 
-# q3_q103_visual_f("Q103_1")
+
+# Relatively high negative corr qnum: q3 with q103_3 
+# Relatively high positive corr qnum: q3 with q103_5
+
+# q3_q103_visual_f("Q103_3")
 
 # Do GCs with many years of patient-facing genetic counseling experience (Q3) tend to agree with the embryo transfer justification of “quality of life” across conditions (Q24, Q31, 32, 108, 113, 51, 110) more often than GCs with less years of patient-facing genetic counseling experience? 
 
@@ -164,5 +177,8 @@ renal_alport_visual<- renal_alport %>% select(c(1,4,5))
 renal_alport_table <- renal_alport_visual %>%
   pivot_longer(-c(IPAddress), names_to = "question_num_2", values_to = "Response")
 
-# ggplot(renal_alport_table, aes(x = Response, fill = question_num_2))+
-#   geom_bar(stat = "count", position = "dodge")
+ggplot(renal_alport_table, aes(x = Response, fill = question_num_2))+
+  geom_bar(stat = "count", position = "dodge")
+
+ggplot(BRCA1_cancer_table, aes(x = Response, fill = question_num_1))+
+  geom_bar(stat = "count", position = "dodge")
