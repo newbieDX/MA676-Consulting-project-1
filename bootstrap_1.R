@@ -313,7 +313,7 @@ boxplot_corr_1 <- function(df_corr){
   ggplot(data = df_corr_longer,mapping = aes(x=question_num,y=corr_value)) +
     geom_boxplot()
 }
-
+##----------------boxplot
 boxplot_corr(q10_q103_corr)
 
 boxplot_corr(q7_q103_corr)
@@ -334,51 +334,95 @@ boxplot_corr(q3_resava_corr)
 # lapply(q10_q103_corr,FUN = fivenum)
 
 
-boxplot(q10_q103_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
+# boxplot(q10_q103_corr, main = "Correlation")
+# abline(h=0,col = "red")
+# abline(h=0.05,col = "red",lty = 3)
+# abline(h=-0.05,col = "red",lty = 3)
 
-boxplot(q7_q103_corr, main = "Correlation", las=2)
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
+##---------------read the large bootstrap dataset and draw the 95% interval
 
+### get the 0.5, 0.975, 0.025 quantile of one list of data
+interval_95 <- function(df1){
+  q1 <- quantile(df1,c(0.5,0.975,0.025))
+  
+}
 
-boxplot(q7_q10_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-
-boxplot(q3_q103_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_qol_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-
-boxplot(q3_fh_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_var_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_repauto_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-boxplot(q3_resava_corr, main = "Correlation")
-abline(h=0,col = "red")
-abline(h=0.05,col = "red",lty = 3)
-abline(h=-0.05,col = "red",lty = 3)
-
-# q3_q25_corr, q3_q107_corr, q3_q42_corr,
-# q3_q109_corr, q3_q54_corr
-
-text(x=fivenum(q10_q103_corr), labels = fivenum(q10_q103_corr))
+###test
+# df1 <- read.csv("bootstrap_result/q7_q10_corr.csv", header = T)
+# df1 <- select(df1,c(-1))
+# 
+# df1_data <- df1 %>% lapply(FUN = interval_95) %>% as.data.frame()
+# 
+# df1_data$quantile <- rownames(df1_data)
+# df_corr_longer <- df1_data %>%
+#   pivot_longer(cols = c(1:(ncol(df1_data)-1)),
+#                names_to = "question_num",
+#                values_to = "corr_value")
+# 
+# df_corr_wider <- df_corr_longer %>% 
+#   pivot_wider(names_from = "quantile",values_from = "corr_value")
+# 
+# colnames(df_corr_wider) <- c("question_num","median","up","low")
+# 
+# 
+# 
+# 
+# 
+# ggplot(df_corr_wider, aes(x = question_num, y = median)) + geom_point() + 
+#   geom_errorbar(aes(ymin = low, ymax = up))
 
 
+interval_95_plot <- function(qnum = "q7_q10", baseline = T){
+  file_path <- paste0("bootstrap_result","/",qnum,"_","corr.csv")
+  df1 <- read.csv(file = file_path, header = T)
+  
+  df1 <- select(df1,c(-1))
+  
+  df1_data <- df1 %>% lapply(FUN = interval_95) %>% as.data.frame()
+  
+  df1_data$quantile <- rownames(df1_data)
+  df_corr_longer <- df1_data %>%
+    pivot_longer(cols = c(1:(ncol(df1_data)-1)),
+                 names_to = "question_num",
+                 values_to = "corr_value")
+  
+  df_corr_wider <- df_corr_longer %>% 
+    pivot_wider(names_from = "quantile",values_from = "corr_value")
+  
+  colnames(df_corr_wider) <- c("question_num","median","up","low")
+  
+  
+  
+  
+  if (baseline == T){
+    ggplot(df_corr_wider, aes(x = question_num, y = median)) + geom_point() + 
+      geom_errorbar(aes(ymin = low, ymax = up)) +
+      geom_hline(aes(yintercept=0), colour="#990000", linetype="solid")+
+      geom_hline(aes(yintercept=0.05), colour="#990000", linetype="dashed")+
+      geom_hline(aes(yintercept=-0.05), colour="#990000", linetype="dashed") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  }
+  else{
+    ggplot(df_corr_wider, aes(x = question_num, y = median)) + geom_point() + 
+      geom_errorbar(aes(ymin = low, ymax = up))
+  }
+  
+}
+
+interval_95_plot("q10_q103")
+
+interval_95_plot("q7_q103")
+
+interval_95_plot("q7_q10",baseline = F)
+
+interval_95_plot("q3_q103")
+
+interval_95_plot("q3_qol")
+
+interval_95_plot("q3_fh")
+
+interval_95_plot("q3_var")
+
+interval_95_plot("q3_repauto")
+
+interval_95_plot("q3_resava")
