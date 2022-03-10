@@ -97,7 +97,28 @@ renal_alport <- q102 %>% select(c(1, 2, 3, 9, 10))
 BRCA1_cancer <- q102 %>% select(c(1, 2, 3, 5, 6)) 
   
 
-  
-  
-  
+# Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “quality of life” across conditions (Q24, Q31, Q32, Q108, Q113, Q51, Q110) more often than GCs who answered NO to Q7? 
+
+q7_qol <-survey_clean_finished %>% select(c(1, 4, 5, 21, 32, 37, 41, 46, 52, 57, 62))
+
+# Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “family history” across conditions (Q26, Q30, Q37, Q40, Q46, Q52, Q58) more often than Do GCs who answered NO to Q7 ? 
+
+q7_fh <- survey_clean_finished %>% select(c(1, 4, 5, 21, 34, 38, 43, 48, 54, 58, 63))
+
+# Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “Variability” across conditions (Q23, Q27, Q33, Q38, Q45, Q56) more often than GCs who answered NO to Q7?
+
+q7_var <- survey_clean_finished %>% select(c(1, 4, 5, 21, 31, 36, 40, 45, 51, 61))
+
+# Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “reproductive autonomy” across conditions (Q29, Q35, Q36, Q41, Q47, Q53, Q59) more often than GCs who answered NO to Q7 ?
+
+q7_repauto <- survey_clean_finished %>% select(c(1, 4, 5, 21, 35, 39, 44, 50, 56, 60, 64))
+
+# Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, Q107, Q42, Q109, Q54) more often than GCs who answered NO to Q7?
+
+q7_resava <- survey_clean_finished %>% select(c(1, 4, 5, 21, 33, 42, 47, 53, 59))
+
+# Do GCs who answered YES to Q7 tend to feel more morally uneasy with transferring affected embryos (Q102_1 - 102_11) more often than GCs who answered NO to Q7
+
+q7_q102 <- survey_clean_finished %>% select(c(1, 4, 5, 21) | starts_with("Q102"))
+
   
