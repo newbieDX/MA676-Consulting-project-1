@@ -78,6 +78,43 @@ q7_fh_general <- ggplot(q7_fh_table, aes(x = Response, fill = question_num))+
 
 # q7_fh_visual_f("Q37")
   
+
+# who answer yes to q7 and family history
+q7_fh_yes_prop_visual_f <- function(cleaned_table){
+  yes <- cleaned_table %>% filter(Q7 == "Yes")
+  
+  yes_prop <- as.data.frame(table(yes$question_num, yes$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    mutate("1" = 0) %>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>%
+    mutate(proportion = Freq/22)
+  
+  ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_fh_yes_prop_visual_f(q7_fh_table)
+
+# who answer no to q7 and family history
+q7_fh_no_prop_visual_f <- function(cleaned_table){
+  no <- cleaned_table %>% filter(Q7 == "No")
+  
+  no_prop <- as.data.frame(table(no$question_num, no$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>% 
+    mutate(proportion = Freq/77)
+  
+  ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_fh_no_prop_visual_f(q7_fh_table)
+
+
 # Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “Variability” across conditions (Q23, Q27, Q33, Q38, Q45, Q56) more often than GCs who answered NO to Q7?
 
 q7_var_visual <- q7_var %>% select(c(1,4:10))
@@ -97,6 +134,42 @@ q7_var_visual_f <- function(qnum){
 q7_var_general <- ggplot(q7_var_table, aes(x = Response, fill = question_num))+
   geom_bar(stat = "count", position = "dodge")+
   facet_grid(~Q7)
+
+
+# who answer yes to q7 and variability
+q7_var_yes_prop_visual_f <- function(cleaned_table){
+  yes <- cleaned_table %>% filter(Q7 == "Yes")
+  
+  yes_prop <- as.data.frame(table(yes$question_num, yes$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    # mutate("1" = 0) %>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>%
+    mutate(proportion = Freq/22)
+  
+  ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_var_yes_prop_visual_f(q7_var_table)
+
+# who answer no to q7 and variability
+q7_var_no_prop_visual_f <- function(cleaned_table){
+  no <- cleaned_table %>% filter(Q7 == "No")
+  
+  no_prop <- as.data.frame(table(no$question_num, no$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>% 
+    mutate(proportion = Freq/77)
+  
+  ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_var_no_prop_visual_f(q7_var_table)
 
   
 # Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “reproductive autonomy” across conditions (Q29, Q35, Q36, Q41, Q47, Q53, Q59) more often than GCs who answered NO to Q7 ?
@@ -119,6 +192,42 @@ q7_repauto_general <- ggplot(q7_repauto_table, aes(x = Response, fill = question
   facet_grid(~Q7)
 
 # q7_repauto_visual_f("Q47")
+
+
+# who answer yes to q7 and reproductive autonomy
+q7_repauto_yes_prop_visual_f <- function(cleaned_table){
+  yes <- cleaned_table %>% filter(Q7 == "Yes")
+  
+  yes_prop <- as.data.frame(table(yes$question_num, yes$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    # mutate("1" = 0) %>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>%
+    mutate(proportion = Freq/22)
+  
+  ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_repauto_yes_prop_visual_f(q7_repauto_table)
+
+# who answer no to q7 and reproductive autonomy
+q7_repauto_no_prop_visual_f <- function(cleaned_table){
+  no <- cleaned_table %>% filter(Q7 == "No")
+  
+  no_prop <- as.data.frame(table(no$question_num, no$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>% 
+    mutate(proportion = Freq/77)
+  
+  ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+# q7_repauto_no_prop_visual_f(q7_repauto_table)
   
 # Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, Q107, Q42, Q109, Q54) more often than GCs who answered NO to Q7?
 
@@ -141,6 +250,44 @@ q7_resava_general <- ggplot(q7_resava_table, aes(x = Response, fill = question_n
 
 
 # q7_resava_visual_f("Q54")
+
+
+# who answer yes to q7 and Resources available
+q7_resava_yes_prop_visual_f <- function(cleaned_table){
+  yes <- cleaned_table %>% filter(Q7 == "Yes")
+  
+  yes_prop <- as.data.frame(table(yes$question_num, yes$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    mutate("1" = 0) %>%
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>%
+    mutate(proportion = Freq/22)
+  
+  ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+q7_resava_yes_prop_visual_f(q7_resava_table)
+
+# who answer no to q7 and Resources available
+q7_resava_no_prop_visual_f <- function(cleaned_table){
+  no <- cleaned_table %>% filter(Q7 == "No")
+  
+  no_prop <- as.data.frame(table(no$question_num, no$Response)) %>% 
+    pivot_wider(names_from = Var2, values_from = Freq)%>% 
+    mutate("1" = 0) %>%
+    pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>% 
+    mutate(proportion = Freq/77)
+  
+  ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
+    geom_bar(stat = "identity", position = "dodge")+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    facet_grid(~Var1)
+}
+
+q7_resava_no_prop_visual_f(q7_resava_table)
+
   
 # Do GCs who answered YES to Q7 tend to feel more morally uneasy with transferring affected embryos (Q102_1 - 102_11) more often than GCs who answered NO to Q7
 
