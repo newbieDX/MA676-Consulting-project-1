@@ -9,19 +9,19 @@ q7_qol_visual <- q7_qol %>% select(c(1,4:11))
 q7_qol_table <- q7_qol_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_qol_visual_f <- function(qnum){
-  df <- q7_qol_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
-
-# q7_qol_visual_f("Q108")
-
-q7_qol_general <- ggplot(q7_qol_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_qol_visual_f <- function(qnum){
+#   df <- q7_qol_table %>% filter(question_num == qnum)
+# 
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
+# 
+# # q7_qol_visual_f("Q108")
+# 
+# q7_qol_general <- ggplot(q7_qol_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 # who answer yes to q7 and quality of life
 q7_qol_yes_prop_visual_f <- function(cleaned_table){
@@ -62,23 +62,23 @@ q7_qol_no_prop_visual_f(q7_qol_table)
   
   
 
- # Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “family history” across conditions (Q26, Q30, Q37, Q40, Q46, Q52, Q58) more often than Do GCs who answered NO to Q7 ?
+# Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “family history” across conditions (Q26, Q30, Q37, Q40, Q46, Q52, Q58) more often than Do GCs who answered NO to Q7 ?
 
 q7_fh_visual <- q7_fh %>% select(c(1,4:11))
 q7_fh_table <- q7_fh_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_fh_visual_f <- function(qnum){
-  df <- q7_fh_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
-
-q7_fh_general <- ggplot(q7_fh_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_fh_visual_f <- function(qnum){
+#   df <- q7_fh_table %>% filter(question_num == qnum)
+#   
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
+# 
+# q7_fh_general <- ggplot(q7_fh_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 
 # q7_fh_visual_f("Q37")
@@ -126,19 +126,19 @@ q7_var_visual <- q7_var %>% select(c(1,4:10))
 q7_var_table <- q7_var_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_var_visual_f <- function(qnum){
-  df <- q7_var_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
+# q7_var_visual_f <- function(qnum){
+#   df <- q7_var_table %>% filter(question_num == qnum)
+#   
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
 
 # q7_var_visual_f("Q23")
 
-q7_var_general <- ggplot(q7_var_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_var_general <- ggplot(q7_var_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 
 # who answer yes to q7 and variability
@@ -183,18 +183,18 @@ q7_repauto_visual <- q7_repauto %>% select(c(1,4:11))
 q7_repauto_table <- q7_repauto_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_repauto_visual_f <- function(qnum){
-  df <- q7_repauto_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
-
-
-q7_repauto_general <- ggplot(q7_repauto_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_repauto_visual_f <- function(qnum){
+#   df <- q7_repauto_table %>% filter(question_num == qnum)
+#   
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
+# 
+# 
+# q7_repauto_general <- ggplot(q7_repauto_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 # q7_repauto_visual_f("Q47")
 
@@ -240,18 +240,18 @@ q7_resava_visual <- q7_resava %>% select(c(1,4:9))
 q7_resava_table <- q7_resava_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_resava_visual_f <- function(qnum){
-  df <- q7_resava_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
-
-
-q7_resava_general <- ggplot(q7_resava_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_resava_visual_f <- function(qnum){
+#   df <- q7_resava_table %>% filter(question_num == qnum)
+#   
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
+# 
+# 
+# q7_resava_general <- ggplot(q7_resava_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 
 # q7_resava_visual_f("Q54")
