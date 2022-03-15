@@ -210,7 +210,7 @@ ggplot(q7_resava_agree_prop, aes(x = question_num, y = agree_proportion, fill = 
 
 # Do GCs who answered YES to Q7 tend to feel more morally uneasy with transferring affected embryos (Q102_1 - 102_11) more often than GCs who answered NO to Q7
 
-q7_q102_visual <- q7_q102 %>% select(c(1,4:11))
+q7_q102_visual <- q7_q102 %>% select(c(1,4:15))
 q7_q102_table <- q7_q102_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
