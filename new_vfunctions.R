@@ -35,7 +35,7 @@ q7_qol_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
@@ -52,7 +52,7 @@ q7_qol_no_prop_visual_f <- function(cleaned_table){
 
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
@@ -96,11 +96,11 @@ q7_fh_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size =2)+
     facet_grid(~Var1)
 }
 
-# q7_fh_yes_prop_visual_f(q7_fh_table)
+q7_fh_yes_prop_visual_f(q7_fh_table)
 
 # who answer no to q7 and family history
 q7_fh_no_prop_visual_f <- function(cleaned_table){
@@ -113,11 +113,11 @@ q7_fh_no_prop_visual_f <- function(cleaned_table){
   
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0,size = 2)+
     facet_grid(~Var1)
 }
 
-# q7_fh_no_prop_visual_f(q7_fh_table)
+q7_fh_no_prop_visual_f(q7_fh_table)
 
 
 # Do GCs who answered YES to Q7 tend to agree with the embryo transfer justification of “Variability” across conditions (Q23, Q27, Q33, Q38, Q45, Q56) more often than GCs who answered NO to Q7?
@@ -153,11 +153,11 @@ q7_var_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0,size = 2)+
     facet_grid(~Var1)
 }
 
-# q7_var_yes_prop_visual_f(q7_var_table)
+q7_var_yes_prop_visual_f(q7_var_table)
 
 # who answer no to q7 and variability
 q7_var_no_prop_visual_f <- function(cleaned_table){
@@ -170,11 +170,11 @@ q7_var_no_prop_visual_f <- function(cleaned_table){
   
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
-# q7_var_no_prop_visual_f(q7_var_table)
+q7_var_no_prop_visual_f(q7_var_table)
 
   
 # Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “reproductive autonomy” across conditions (Q29, Q35, Q36, Q41, Q47, Q53, Q59) more often than GCs who answered NO to Q7 ?
@@ -211,11 +211,11 @@ q7_repauto_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size= 2)+
     facet_grid(~Var1)
 }
 
-# q7_repauto_yes_prop_visual_f(q7_repauto_table)
+q7_repauto_yes_prop_visual_f(q7_repauto_table)
 
 # who answer no to q7 and reproductive autonomy
 q7_repauto_no_prop_visual_f <- function(cleaned_table){
@@ -228,11 +228,11 @@ q7_repauto_no_prop_visual_f <- function(cleaned_table){
   
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
-# q7_repauto_no_prop_visual_f(q7_repauto_table)
+q7_repauto_no_prop_visual_f(q7_repauto_table)
   
 # Do GCs who answered YES to Q7  tend to agree with the embryo transfer justification of “Resources available” across conditions (Q25, Q107, Q42, Q109, Q54) more often than GCs who answered NO to Q7?
 
@@ -269,7 +269,7 @@ q7_resava_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
@@ -287,7 +287,7 @@ q7_resava_no_prop_visual_f <- function(cleaned_table){
   
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
@@ -300,19 +300,19 @@ q7_q102_visual <- q7_q102 %>% select(c(1,4:11))
 q7_q102_table <- q7_q102_visual %>%
   pivot_longer(-c(IPAddress,Q7), names_to = "question_num", values_to = "Response")
 
-q7_q102_visual_f <- function(qnum){
-  df <- q7_q102_table %>% filter(question_num == qnum)
-  
-  ggplot(df, aes(x = Response, fill = Q7))+
-    geom_bar(stat = "count", position = "stack")+
-    facet_grid(~Q7)
-}
-
-# q7_q102_visual_f("Q102_1")
-
-q7_q102_general <- ggplot(q7_q102_table, aes(x = Response, fill = question_num))+
-  geom_bar(stat = "count", position = "dodge")+
-  facet_grid(~Q7)
+# q7_q102_visual_f <- function(qnum){
+#   df <- q7_q102_table %>% filter(question_num == qnum)
+#   
+#   ggplot(df, aes(x = Response, fill = Q7))+
+#     geom_bar(stat = "count", position = "stack")+
+#     facet_grid(~Q7)
+# }
+# 
+# # q7_q102_visual_f("Q102_1")
+# 
+# q7_q102_general <- ggplot(q7_q102_table, aes(x = Response, fill = question_num))+
+#   geom_bar(stat = "count", position = "dodge")+
+#   facet_grid(~Q7)
 
 
 # who answer yes to q7 and q102
@@ -327,11 +327,11 @@ q7_q102_yes_prop_visual_f <- function(cleaned_table){
   
   ggplot(yes_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size = 2)+
     facet_grid(~Var1)
 }
 
-# q7_q102_yes_prop_visual_f(q7_q102_table)
+q7_q102_yes_prop_visual_f(q7_q102_table)
 
 # who answer no to q7 and q102
 q7_q102_no_prop_visual_f <- function(cleaned_table){
@@ -344,8 +344,8 @@ q7_q102_no_prop_visual_f <- function(cleaned_table){
   
   ggplot(no_prop, aes(x = Response, y = proportion, fill = Response))+
     geom_bar(stat = "identity", position = "dodge")+
-    geom_text(aes(label = percent(proportion,0.01)), vjust = 0)+
+    geom_text(aes(label = percent(proportion,0.01)), vjust = 0, size= 2)+
     facet_grid(~Var1)
 }
 
-# q7_q102_no_prop_visual_f(q7_q102_table)
+q7_q102_no_prop_visual_f(q7_q102_table)
