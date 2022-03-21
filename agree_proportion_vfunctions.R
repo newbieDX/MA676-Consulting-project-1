@@ -10,14 +10,14 @@ q7_qol_table <- q7_qol_visual %>%
 
 q7_qol_yes <- q7_qol_table %>% filter(Q7 == "Yes")
 
-q7_qol_yes_agree_prop <- as.data.frame(table(q7_qol_yes$question_num, q7_qol_yes$Response)) %>% 
+q7_qol_yes_agree_prop <- as.data.frame(table(q7_qol_yes$question_num, q7_qol_yes$Response))%>% 
   pivot_wider(names_from = Var2, values_from = Freq)%>% 
   mutate("1" = 0) %>% 
   pivot_longer(-c("Var1"), names_to = "Response", values_to = "Freq") %>%
-  mutate(proportion = Freq/22) %>% 
+  mutate(proportion = Freq/22)%>% 
   select(-c("Freq")) %>% 
   pivot_wider(names_from = Var1, values_from = proportion) %>% 
-  filter(Response == 4 | Response == 5) %>% 
+  filter(Response == 4 | Response == 5)%>% 
   pivot_longer(-c("Response"), names_to = "question_num", values_to = "proportion") %>% 
   group_by(question_num) %>% 
   summarise(agree_proportion = sum(proportion)) %>% mutate(Q7 = "Yes")
