@@ -5,19 +5,20 @@ library("dplyr")
 
 # Do all the respondents tend to agree with these questions/justifications?
 # 1. Q13
-
 q13 <- survey_clean_finished %>% select(c(1, 4, 5, 23))
+
+q13_agree <- data.frame(table(q13$Q13)) %>% mutate(propotion = Freq/99)
+  
+ggplot(q13_agree, aes(x = Var1, y = propotion, fill = Var1))+
+  geom_bar(stat = "identity", position = "dodge")
 
 
 # 2. Q103_1 - Q103_7
-
-
 q103 <- survey_clean_finished %>% select(c(1, 4, 5, 24:30))
 
 
 
 # 3. Morally uneasy table: Q102_1-11
-
 q102 <- survey_clean_finished %>% select(c(1, 4, 5) | starts_with("Q102"))
 
 
@@ -25,6 +26,8 @@ q102 <- survey_clean_finished %>% select(c(1, 4, 5) | starts_with("Q102"))
 # Trisomy 21: Q23 Q24 Q25 Q26 Q29
 
 t_21 <- survey_clean_finished %>% select(c(1, 4, 5, 31:35))
+
+
 
 # X-linked Alport female: Q27 Q31 Q30 Q35
 
@@ -105,4 +108,5 @@ autonomy <- survey_clean_finished %>% select(c(1, 4, 5, 34, 38, 43, 48, 54, 58, 
 # Do  GCs with fewer years of patient-facing genetic counseling experience (Q3) tend to agree more with the justifications of the “welfare of the child” group or with the “Autonomy” group than GCs with many years of patient-facing genetic counseling experience?
 
 q3_welfare <- survey_clean_finished %>% select(c(1, 4, 5, 12, 32, 37, 41, 46, 52, 57, 62, 34, 38, 43, 48, 54, 58, 63, 31, 36, 40, 45, 51, 61, 49, 55, 33, 42, 47, 53, 59))
+
 q3_autonomy <- survey_clean_finished %>% select(c(1, 4, 5, 12, 34, 38, 43, 48, 54, 58, 63, 35, 39, 44, 50, 56, 60, 64))
