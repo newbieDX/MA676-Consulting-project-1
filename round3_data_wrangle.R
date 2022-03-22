@@ -7,10 +7,12 @@ library("dplyr")
 # 1. Q13
 q13 <- survey_clean_finished %>% select(c(1, 4, 5, 23))
 
-q13_agree <- data.frame(table(q13$Q13)) %>% mutate(propotion = Freq/99)
+
+q13_agree <- data.frame(table(q13$Q13)) %>% mutate(propotion = Freq/sum(Freq))
   
 ggplot(q13_agree, aes(x = Var1, y = propotion, fill = Var1))+
-  geom_bar(stat = "identity", position = "dodge")
+  geom_bar(stat = "identity", position = "dodge")+
+  geom_text(aes(label = percent(propotion,0.01)), position = position_dodge(width = 1), vjust = 1.5)
 
 
 # 2. Q103_1 - Q103_7
@@ -25,8 +27,16 @@ q102 <- survey_clean_finished %>% select(c(1, 4, 5) | starts_with("Q102"))
 # Descriptive analysis organized by conditions:
 # Trisomy 21: Q23 Q24 Q25 Q26 Q29
 
-t_21 <- survey_clean_finished %>% select(c(1, 4, 5, 31:35))
+t_21 <- survey_clean_finished %>% select(c(1, 31:35))
 
+t_21 <- t_21  %>%
+  pivot_longer(-c(IPAddress), names_to = "question_num", values_to = "Response")
+
+t_21_visual <- as.data.frame(table(t_21$question_num,t_21$Response)) %>% mutate(proportion = Freq/99)
+
+ggplot(t_21_visual, aes(x = Var1, y = proportion, fill = Var2))+
+  geom_bar(stat = "identity", position = "dodge")+
+  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5)
 
 
 # X-linked Alport female: Q27 Q31 Q30 Q35
@@ -66,6 +76,8 @@ ht <- survey_clean_finished %>% select(c(1, 4, 5, 61:64))
 qol <- survey_clean_finished %>% select(c(1, 4, 5, 32, 37, 41, 46, 52, 57, 62))
 
 
+
+
 # Family history: (Q26, 30, 37, 40, 46, 52, 58)
 
 fh <- survey_clean_finished %>% select(c(1, 4, 5, 34, 38, 43, 48, 54, 58, 63))
@@ -88,6 +100,8 @@ resava <- survey_clean_finished %>% select(c(1, 4, 5, 33, 42, 47, 53, 59))
 # Do GCs who said YES to Q7 tend to agree with Q13, Q103_1 - Q103_7 more often than GCs who answered NO?
 
 q7_q13_q103 <- survey_clean_finished %>% select(c(1, 4, 5, 21, 23) | starts_with("Q103"))
+
+
 
 # Do GCs with fewer years of patient-facing genetic counseling experience (Q3)  tend to agree with Q13 (every embryo is a human life worthy of birth) more often than GCs with many years of patient facing experience?
 
