@@ -3,34 +3,64 @@ library("ggplot2")
 library("scales")
 library("dplyr")
 
+# make a function to create figures of barplot:
+
+survey_barplot <- function(df_question, plot_type = "dodge", size = 5){
+  
+  if (plot_type == "dodge"){
+    if (ncol(df_question %>% select(starts_with("Var"))) == 1){
+      ggplot(df_question, aes(x = Var1, y = proportion, fill = Var1)) + 
+        geom_bar(stat = "identity", position = "dodge") +
+        geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = size)
+    }else{
+      ggplot(df_question, aes(x = Var1, y = proportion, fill = Var2)) + 
+        geom_bar(stat = "identity", position = "dodge") +
+        geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = size)
+    }
+    
+  }
+  else if(plot_type == "stack"){
+    ggplot(df_question, aes(x = Var1, y = proportion, fill = Var2))+
+      geom_bar(stat = "identity", position = "stack")+
+      geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1, size = size)
+    }
+  
+}
+# demo
+df_question <- survey_clean_finished %>% select(Q13)
+
+
+# make a function to wrangle the data
+
+wrangle_survey <- function(df_1, question_series = "", name = ""){
+  # df_2 <- df_1 %>% select(question_series)
+  df_2 <- df_1 %>% 
+    pivot_longer(everything(), names_to = "question_num", values_to = "Response")
+  df_3 <- df_2 %>% 
+    as.data.frame(table(df_2$question_num,df_2$Response)) 
+  df_3 <- df_3 %>% mutate(proportion = df_3["Freq"]/sum(df_3["Freq"]))
+  
+  return(df_3)
+}
+
 # Do all the respondents tend to agree with these questions/justifications?
 # 1. Q13
 q13 <- survey_clean_finished %>% select(c(1, 4, 5, 23))
+q13_agree <- data.frame(table(q13$Q13)) %>% mutate(proportion = Freq/sum(Freq))
 
-
-q13_agree <- data.frame(table(q13$Q13)) %>% mutate(propotion = Freq/sum(Freq))
-  
-ggplot(q13_agree, aes(x = Var1, y = propotion, fill = Var1))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(propotion,0.01)), position = position_dodge(width = 1), vjust = 1.5)
-
+survey_barplot(q13_agree)
 
 # 2. Q103_1 - Q103_7
-q103 <- survey_clean_finished %>% select(c(1, 24:30))
+q103 <- survey_clean_finished %>% select(c(24:30))
 
 q103 <- q103  %>%
-  pivot_longer(-c(IPAddress), names_to = "question_num", values_to = "Response")
+  pivot_longer(everything(), names_to = "question_num", values_to = "Response")
 
 q103_visual <- as.data.frame(table(q103$question_num,q103$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(q103_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 2)
 
-
-ggplot(q103_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1, size = 3)
+survey_barplot(q103_visual, plot_type = "dodge", size = 2)
+survey_barplot(q103_visual, plot_type = "stack", size = 3)
 
 
 # 3. Morally uneasy table: Q102_1-11
@@ -42,14 +72,17 @@ q102 <- q102  %>%
 
 q102_visual <- as.data.frame(table(q102$question_num,q102$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(q102_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size =2)
+survey_barplot(q102_visual, plot_type = "dodge", size = 2)
+survey_barplot(q102_visual, plot_type = "stack", size = 3)
 
-
-ggplot(q102_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1,size = 3)
+# ggplot(q102_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size =2)
+# 
+# 
+# ggplot(q102_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1,size = 3)
 
 # Descriptive analysis organized by conditions:
 # Trisomy 21: Q23 Q24 Q25 Q26 Q29
@@ -61,13 +94,16 @@ t_21 <- t_21  %>%
 
 t_21_visual <- as.data.frame(table(t_21$question_num,t_21$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(t_21_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 2)
+survey_barplot(t_21_visual, plot_type = "dodge", size = 2)
+survey_barplot(t_21_visual, plot_type = "stack", size = 3)
 
-ggplot(t_21_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+# ggplot(t_21_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 2)
+# 
+# ggplot(t_21_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 # X-linked Alport female: Q27 Q31 Q30 Q35
 
@@ -78,13 +114,17 @@ x_alport_female <- x_alport_female  %>%
 
 x_alport_female_visual <- as.data.frame(table(x_alport_female$question_num,x_alport_female$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(x_alport_female_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
 
-ggplot(x_alport_female_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+survey_barplot(t_21_visual, plot_type = "dodge", size = 2)
+survey_barplot(t_21_visual, plot_type = "stack", size = 3)
+
+# ggplot(x_alport_female_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(x_alport_female_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 
 
@@ -98,14 +138,18 @@ x_alport_male <- x_alport_male  %>%
 
 x_alport_male_visual <- as.data.frame(table(x_alport_male$question_num,x_alport_male$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(x_alport_male_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5,size =3)
 
-ggplot(x_alport_male_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
-  
+survey_barplot(x_alport_male_visual, plot_type = "dodge", size = 2)
+survey_barplot(x_alport_male_visual, plot_type = "stack", size = 3)
+
+# ggplot(x_alport_male_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5,size =3)
+# 
+# ggplot(x_alport_male_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+#   
 
 # BRCA1: Q38 Q108 Q42 Q40 Q43
 
@@ -116,13 +160,16 @@ brca1 <- brca1  %>%
 
 brca1_visual <- as.data.frame(table(brca1$question_num,brca1$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(brca1_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+survey_barplot(brca1_visual, plot_type = "dodge", size = 2)
+survey_barplot(brca1_visual, plot_type = "stack", size = 3)
 
-ggplot(brca1_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size =3)
+# ggplot(brca1_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(brca1_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size =3)
 
 
 # FAP: Q45 Q113 Q109 Q46 Q49 Q47
@@ -134,13 +181,16 @@ fap <- fap  %>%
 
 fap_visual <- as.data.frame(table(fap$question_num,fap$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(fap_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+survey_barplot(fap_visual, plot_type = "dodge", size = 2)
+survey_barplot(fap_visual, plot_type = "stack", size = 3)
 
-ggplot(fap_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5,size =3)
+# ggplot(fap_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(fap_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5,size =3)
 
 
 # GJB2: Q51 Q52 Q54 Q53
@@ -153,13 +203,16 @@ gjb2 <- gjb2  %>%
 
 gjb2_visual <- as.data.frame(table(gjb2$question_num,gjb2$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(gjb2_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+survey_barplot(gjb2_visual, plot_type = "dodge", size = 2)
+survey_barplot(gjb2_visual, plot_type = "stack", size = 3)
 
-ggplot(gjb2_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+# ggplot(gjb2_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(gjb2_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 
 # Huntington’s: Q56 Q110 Q58 Q59
@@ -171,13 +224,16 @@ ht <- ht  %>%
 
 ht_visual <- as.data.frame(table(ht$question_num,ht$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(ht_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
 
-ggplot(ht_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1.5, size = 3)
+survey_barplot(ht_visual, plot_type = "dodge", size = 2)
+survey_barplot(ht_visual, plot_type = "stack", size = 3)
+# ggplot(ht_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(ht_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(), vjust = 1.5, size = 3)
 
 
 # Descriptive analysis organized by justifications:
@@ -190,13 +246,17 @@ qol <- qol  %>%
 
 qol_visual <- as.data.frame(table(qol$question_num,qol$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(qol_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
 
-ggplot(qol_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5,size =3)
+survey_barplot(qol_visual, plot_type = "dodge", size = 2)
+survey_barplot(qol_visual, plot_type = "stack", size = 3)
+
+# ggplot(qol_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(qol_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5,size =3)
 
 
 
@@ -209,13 +269,15 @@ fh <- fh  %>%
 
 fh_visual <- as.data.frame(table(fh$question_num,fh$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(fh_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
-
-ggplot(fh_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+survey_barplot(fh_visual, plot_type = "dodge", size = 2)
+survey_barplot(fh_visual, plot_type = "stack", size = 3)
+# ggplot(fh_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(fh_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 
 # Variability: (Q23, 27 33, 38, 45, 56)
@@ -227,13 +289,15 @@ var <- var  %>%
 
 var_visual <- as.data.frame(table(var$question_num,var$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(var_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
-
-ggplot(var_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+survey_barplot(var_visual, plot_type = "dodge", size = 2)
+survey_barplot(var_visual, plot_type = "stack", size = 3)
+# ggplot(var_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(var_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
   
 # Reproductive autonomy: (Q23, 27 33, 38, 45, 56)
 
@@ -244,13 +308,15 @@ repauto <- repauto  %>%
 
 repauto_visual <- as.data.frame(table(repauto$question_num,repauto$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(repauto_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5,size =3)
-
-ggplot(repauto_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+survey_barplot(repauto_visual, plot_type = "dodge", size = 2)
+survey_barplot(repauto_visual, plot_type = "stack", size = 3)
+# ggplot(repauto_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5,size =3)
+# 
+# ggplot(repauto_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 
 
@@ -263,13 +329,15 @@ resava <- resava  %>%
 
 resava_visual <- as.data.frame(table(resava$question_num,resava$Response)) %>% mutate(proportion = Freq/99)
 
-ggplot(resava_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
-
-ggplot(resava_visual, aes(x = Var1, y = proportion, fill = Var2))+
-  geom_bar(stat = "identity", position = "stack")+
-  geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
+survey_barplot(resava_visual, plot_type = "dodge", size = 2)
+survey_barplot(resava_visual, plot_type = "stack", size = 3)
+# ggplot(resava_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "dodge")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_dodge(width = 1), vjust = 1.5, size = 3)
+# 
+# ggplot(resava_visual, aes(x = Var1, y = proportion, fill = Var2))+
+#   geom_bar(stat = "identity", position = "stack")+
+#   geom_text(aes(label = percent(proportion,0.01)), position = position_stack(0.5), vjust = 1.5, size = 3)
 
 
 # Do GCs who said YES to Q7 tend to agree with Q13, Q103_1 - Q103_7 more often than GCs who answered NO?
